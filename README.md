@@ -33,7 +33,7 @@ console.log(result);
 {
   "count": 3,
   "version": "v7",
-  "position": {
+  "items": {
     "first": "uuid-1",
     "last": "uuid-3"
   },

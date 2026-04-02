@@ -48,7 +48,7 @@ export function generateUUID({
   return {
     count: safeCount,
     version: finalVersion,
-    position: {
+    items: {
       first: list[0] || null,
       last: list[list.length - 1] || null
     },
