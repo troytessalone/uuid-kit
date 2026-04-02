@@ -1,6 +1,6 @@
 # generate-uuid-version
 
-Generate UUID values (v1, v3, v4, v5, v6, v7) with simple controls.
+Generate UUID values (v4, v7) with simple controls.
 
 ---
 
@@ -48,15 +48,16 @@ console.log(result);
 | Field | Type | Required | Default | Description |
 |------|------|----------|--------|------------|
 | count | number | No | 1 | Number of UUIDs to generate (min 1, max 10) |
-| version | string | No | v7 | UUID version: v1, v3, v4, v5, v6, v7 |
-| name | string | No* | - | Required for v3 and v5 |
-| namespace | string | No* | - | Required for v3 and v5 |
-
-\* `name` and `namespace` are required when using `v3` or `v5`
+| version | string | No | v7 | UUID version: v4 or v7 |
 
 ---
 
 ## Examples
+
+### Default (v7)
+```js
+generateUUID({ count: 2 });
+```
 
 ### v4 (random)
 ```js
@@ -68,25 +69,11 @@ generateUUID({ count: 2, version: "v4" });
 generateUUID({ count: 2, version: "v7" });
 ```
 
-### v5 (deterministic)
-```js
-generateUUID({
-  count: 1,
-  version: "v5",
-  name: "example.com",
-  namespace: "6ba7b810-9dad-11d1-80b4-00c04fd430c8"
-});
-```
-
 ---
 
 ## Supported Versions
 
-- v1 → timestamp-based  
-- v3 → deterministic (MD5)  
 - v4 → random  
-- v5 → deterministic (SHA-1)  
-- v6 → reordered timestamp  
 - v7 → modern time-based (recommended)  
 
 ---
@@ -104,8 +91,7 @@ If using in a Zapier Code step, add:
 
 - Invalid or missing `count` defaults to 1  
 - Maximum `count` is 10  
-- Invalid `version` defaults to v7  
-- v3 and v5 require `name` and `namespace`  
+- Invalid or missing `version` defaults to v7  
 
 ---
 
