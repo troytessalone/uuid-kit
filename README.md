@@ -1,4 +1,4 @@
-# generate-uuid
+# generate-uuid-version
 
 Generate UUID values (v1, v3, v4, v5, v6, v7) with simple controls.
 
@@ -7,7 +7,7 @@ Generate UUID values (v1, v3, v4, v5, v6, v7) with simple controls.
 ## Install
 
 ```bash
-npm install generate-uuid
+npm install generate-uuid-version
 ```
 
 ---
@@ -15,7 +15,7 @@ npm install generate-uuid
 ## Usage
 
 ```js
-import { generateUUID } from "generate-uuid";
+import { generateUUID } from "generate-uuid-version";
 
 const result = generateUUID({
   count: 3,
@@ -95,7 +95,7 @@ generateUUID({
 
 If using in a Zapier Code step, add:
 
-- generate-uuid  
+- generate-uuid-version  
 - uuid@10  
 
 ---

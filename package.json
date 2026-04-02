@@ -1,5 +1,5 @@
 {
-  "name": "generate-uuid",
+  "name": "generate-uuid-version",
   "version": "1.0.0",
   "description": "Generate UUID values (v1, v3, v4, v5, v6, v7) with count support.",
   "type": "module",
@@ -42,10 +42,10 @@
 
   "repository": {
     "type": "git",
-    "url": "https://github.com/troytessalone/generate-uuid.git"
+    "url": "https://github.com/troytessalone/generate-uuid-version.git"
   },
   "bugs": {
-    "url": "https://github.com/troytessalone/generate-uuid/issues"
+    "url": "https://github.com/troytessalone/generate-uuid-version/issues"
   },
-  "homepage": "https://github.com/troytessalone/generate-uuid#readme"
+  "homepage": "https://github.com/troytessalone/generate-uuid-version#readme"
 }
