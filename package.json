@@ -1,0 +1,51 @@
+{
+  "name": "generate-uuid",
+  "version": "1.0.0",
+  "description": "Generate UUID values (v1, v3, v4, v5, v6, v7) with count support.",
+  "type": "module",
+
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+
+  "files": [
+    "index.js"
+  ],
+
+  "engines": {
+    "node": ">=16"
+  },
+
+  "scripts": {
+    "test": "node index.js"
+  },
+
+  "dependencies": {
+    "uuid": "^10.0.0"
+  },
+
+  "keywords": [
+    "uuid",
+    "uuidv1",
+    "uuidv3",
+    "uuidv4",
+    "uuidv5",
+    "uuidv6",
+    "uuidv7",
+    "generator",
+    "utility"
+  ],
+
+  "author": "Troy Tessalone",
+  "license": "MIT",
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/troytessalone/generate-uuid.git"
+  },
+  "bugs": {
+    "url": "https://github.com/troytessalone/generate-uuid/issues"
+  },
+  "homepage": "https://github.com/troytessalone/generate-uuid#readme"
+}
