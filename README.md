@@ -75,13 +75,13 @@ print(result)
 
 ```json
 {
-  "count": 3,
   "version": "v7",
-  "items": {
-    "first": "uuid-1",
-    "last": "uuid-3"
-  },
-  "list": ["uuid-1", "uuid-2", "uuid-3"]
+  "count": 3,
+  "items": [
+    "uuid-1",
+    "uuid-2",
+    "uuid-3"
+  ]
 }
 ```
 

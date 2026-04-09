@@ -60,14 +60,10 @@ def generate_uuid(count=1, version="v7"):
     # ===============================
     # GENERATE
     # ===============================
-    result = [generator() for _ in range(safe_count)]
+    items = [generator() for _ in range(safe_count)]
 
     return {
-        "count": safe_count,
         "version": final_version,
-        "items": {
-            "first": result[0] if result else None,
-            "last": result[-1] if result else None
-        },
-        "list": result
+        "count": safe_count,
+        "items": items
     }
