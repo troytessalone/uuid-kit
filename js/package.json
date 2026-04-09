@@ -1,6 +1,6 @@
 {
   "name": "generate-uuid-version",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Generate UUID values (v4, v7) with count support.",
   "type": "module",
   "main": "./index.js",
