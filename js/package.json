@@ -1,14 +1,21 @@
 {
   "name": "generate-uuid-version",
-  "version": "4.0.1",
-  "description": "Generate UUID values (v4, v7) with count support.",
+  "version": "5.0.0",
+  "description": "Generate UUID values (v4, v7) with formatting, prefixes, and structured output.",
   "type": "module",
   "main": "./index.js",
+  "types": "./index.d.ts",
   "exports": {
-    ".": "./index.js"
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    }
   },
   "files": [
-    "index.js"
+    "index.js",
+    "index.d.ts",
+    "README.md"
   ],
   "engines": {
     "node": ">=16"
@@ -23,8 +30,9 @@
     "uuid",
     "uuidv4",
     "uuidv7",
-    "generator",
-    "utility"
+    "uuid-generator",
+    "uuid-format",
+    "uuid-utility"
   ],
   "author": "Troy Tessalone",
   "license": "MIT",

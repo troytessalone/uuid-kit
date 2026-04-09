@@ -3,38 +3,105 @@
 import { v4 as uuidv4, v7 as uuidv7 } from "uuid";
 
 /**
+ * EXPORTED VALIDATION CONSTANTS
+ */
+export const ALLOWED_FORMATS = Object.freeze([
+  "standard",
+  "compact",
+  "uppercase",
+  "uppercase-compact"
+]);
+
+export const ALLOWED_VERSIONS = Object.freeze([
+  "v4",
+  "v7"
+]);
+
+/**
+ * FORMATTERS
+ */
+function getFormatter(format) {
+  switch (format) {
+    case "compact":
+      return (v) => v.replace(/-/g, "");
+    case "uppercase":
+      return (v) => v.toUpperCase();
+    case "uppercase-compact":
+      return (v) => v.replace(/-/g, "").toUpperCase();
+    case "standard":
+    default:
+      return (v) => v;
+  }
+}
+
+/**
+ * Extract timestamp from UUID v7
+ */
+function extractTimestampV7(uuid) {
+  const hex = uuid.replace(/-/g, "").slice(0, 12);
+  const ms = parseInt(hex, 16);
+  const date = new Date(ms);
+  return {
+    iso: date.toISOString(),
+    unix: ms
+  };
+}
+
+/**
+ * VERSION CONFIG (extensible + frozen)
+ */
+const VERSION_CONFIG = Object.freeze({
+  v4: {
+    generator: uuidv4,
+    features: {}
+  },
+  v7: {
+    generator: uuidv7,
+    features: {
+      hasTimestamp: true,
+      extractTimestamp: extractTimestampV7
+    }
+  }
+});
+
+/**
  * Generate UUID values
- * @param {Object} options
- * @param {number} options.count - number of UUIDs (min 1, max 10)
- * @param {string} options.version - "v4" or "v7"
- * @returns {Object}
  */
 export function generateUUID({
   count = 1,
-  version = "v7"
+  version = "v7",
+  format = "standard",
+  prefix = "",
+  suffix = "",
+  asObjects = false
 } = {}) {
   // ===============================
   // VALIDATE COUNT
   // ===============================
   let safeCount = Number(count);
-  if (isNaN(safeCount) || safeCount < 1) safeCount = 1;
-  if (safeCount > 10) safeCount = 10;
+  if (Number.isNaN(safeCount) || safeCount < 1) safeCount = 1;
+  if (safeCount > 100) safeCount = 100;
+  safeCount = Math.floor(safeCount);
 
   // ===============================
-  // NORMALIZE VERSION
+  // VALIDATE VERSION
   // ===============================
-  const normalizedVersion = String(version || "v7").toLowerCase();
-  const finalVersion = normalizedVersion === "v4" ? "v4" : "v7";
+  const normalizedVersion = String(version).toLowerCase();
+  const finalVersion = ALLOWED_VERSIONS.includes(normalizedVersion)
+    ? normalizedVersion
+    : "v7";
+
+  const { generator, features } = VERSION_CONFIG[finalVersion];
 
   // ===============================
-  // GENERATOR MAP
+  // VALIDATE FORMAT
   // ===============================
-  const generators = {
-    v4: () => uuidv4(),
-    v7: () => uuidv7()
-  };
+  const finalFormat = ALLOWED_FORMATS.includes(format)
+    ? format
+    : "standard";
 
-  const generator = generators[finalVersion];
+  // Precompute formatter
+  const formatter = getFormatter(finalFormat);
 
   // ===============================
   // GENERATE
@@ -42,15 +109,44 @@ export function generateUUID({
   const items = [];
 
   for (let i = 0; i < safeCount; i++) {
-    items.push(generator());
+    const raw = generator();
+
+    // extract timestamp BEFORE mutations
+    let timestamp;
+    if (features?.hasTimestamp && features.extractTimestamp) {
+      timestamp = features.extractTimestamp(raw);
+    }
+
+    // format
+    let value = formatter(raw);
+
+    // prefix / suffix
+    if (prefix) value = prefix + value;
+    if (suffix) value = value + suffix;
+
+    if (asObjects) {
+      const obj = {
+        uuid: value,
+        raw,
+        index: i
+      };
+
+      if (timestamp) {
+        obj.timestamp = timestamp;
+      }
+
+      items.push(obj);
+    } else {
+      items.push(value);
+    }
   }
 
-  // ===============================
-  // RETURN SHAPE
-  // ===============================
   return {
     version: finalVersion,
     count: safeCount,
-    items // array of UUIDs
+    format: finalFormat,
+    items
   };
 }
+
+export default generateUUID;
