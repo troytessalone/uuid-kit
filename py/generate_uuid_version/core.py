@@ -1,12 +1,15 @@
-# py/core.py
+# py/generate_uuid_version/core.py
 
+import importlib
 import uuid
 
+_uuid7_fn = None
+
 try:
-    # Optional: real v7 support if installed
-    from uuid6 import uuid7
+    uuid6_module = importlib.import_module("uuid6")
+    _uuid7_fn = uuid6_module.uuid7
     HAS_UUID7 = True
-except ImportError:
+except Exception:
     HAS_UUID7 = False
 
 
@@ -45,8 +48,8 @@ def generate_uuid(count=1, version="v7"):
         return str(uuid.uuid4())
 
     def generate_v7():
-        if HAS_UUID7:
-            return str(uuid7())
+        if HAS_UUID7 and _uuid7_fn:
+            return str(_uuid7_fn())
         # fallback if uuid7 not available
         return str(uuid.uuid4())
 
