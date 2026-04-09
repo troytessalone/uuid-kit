@@ -39,19 +39,18 @@ export function generateUUID({
   // ===============================
   // GENERATE
   // ===============================
-  const list = [];
+  const items = [];
 
   for (let i = 0; i < safeCount; i++) {
-    list.push(generator());
+    items.push(generator());
   }
 
+  // ===============================
+  // RETURN SHAPE
+  // ===============================
   return {
-    count: safeCount,
     version: finalVersion,
-    items: {
-      first: list[0] || null,
-      last: list[list.length - 1] || null
-    },
-    list
+    count: safeCount,
+    items // array of UUIDs
   };
 }

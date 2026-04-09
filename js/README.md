@@ -31,13 +31,13 @@ console.log(result);
 
 ```json
 {
-  "count": 3,
   "version": "v7",
-  "items": {
-    "first": "uuid-1",
-    "last": "uuid-3"
-  },
-  "list": ["uuid-1", "uuid-2", "uuid-3"]
+  "count": 3,
+  "items": [
+    "uuid-1",
+    "uuid-2",
+    "uuid-3"
+  ]
 }
 ```
 
@@ -55,16 +55,19 @@ console.log(result);
 ## Examples
 
 ### Default (v7)
+
 ```js
 generateUUID({ count: 2 });
 ```
 
 ### v4 (random)
+
 ```js
 generateUUID({ count: 2, version: "v4" });
 ```
 
 ### v7 (time-based, recommended)
+
 ```js
 generateUUID({ count: 2, version: "v7" });
 ```
@@ -73,8 +76,8 @@ generateUUID({ count: 2, version: "v7" });
 
 ## Supported Versions
 
-- v4 → random  
-- v7 → modern time-based (recommended)  
+- v4 → random
+- v7 → modern time-based (recommended)
 
 ---
 
@@ -82,16 +85,16 @@ generateUUID({ count: 2, version: "v7" });
 
 If using in a Zapier Code step, add:
 
-- generate-uuid-version  
-- uuid@10  
+- generate-uuid-version
+- uuid@10
 
 ---
 
 ## Behavior
 
-- Invalid or missing `count` defaults to 1  
-- Maximum `count` is 10  
-- Invalid or missing `version` defaults to v7  
+- Invalid or missing `count` defaults to 1
+- Maximum `count` is 10
+- Invalid or missing `version` defaults to v7
 
 ---
 
