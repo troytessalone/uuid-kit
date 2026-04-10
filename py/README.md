@@ -32,8 +32,8 @@ print(result)
 ```json
 {
   "version": "v7",
-  "count": 3,
   "format": "standard",
+  "count": 3,
   "items": [
     "uuid-1",
     "uuid-2",
