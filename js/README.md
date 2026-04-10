@@ -34,8 +34,8 @@ console.log(result);
 ```json
 {
   "version": "v7",
-  "count": 3,
   "format": "standard",
+  "count": 3,
   "items": [
     "uuid-1",
     "uuid-2",
@@ -112,8 +112,8 @@ Output:
 ```json
 {
   "version": "v7",
-  "count": 2,
   "format": "standard",
+  "count": 2,
   "items": [
     {
       "uuid": "uuid-1",

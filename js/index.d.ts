@@ -31,15 +31,15 @@ export interface UUIDObject {
 
 export interface GenerateUUIDResultStrings {
   version: UUIDVersion;
-  count: number;
   format: UUIDFormat;
+  count: number;
   items: string[];
 }
 
 export interface GenerateUUIDResultObjects {
   version: UUIDVersion;
-  count: number;
   format: UUIDFormat;
+  count: number;
   items: UUIDObject[];
 }
 
