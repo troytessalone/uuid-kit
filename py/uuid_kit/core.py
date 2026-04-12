@@ -2,6 +2,7 @@
 
 import importlib
 import uuid
+from datetime import datetime, timezone
 
 _uuid7_fn = None
 
@@ -45,9 +46,6 @@ def get_formatter(format_value):
 def extract_timestamp_v7(uuid_value):
     hex_value = uuid_value.replace("-", "")[:12]
     ms = int(hex_value, 16)
-
-    from datetime import datetime, timezone
-
     dt = datetime.fromtimestamp(ms / 1000, tz=timezone.utc)
 
     return {
@@ -140,21 +138,15 @@ def generate_uuid(
     extract_timestamp = version_config[final_version]["extractTimestamp"]
 
     # ===============================
-    # GENERATE
+    # GENERATE (optimized)
     # ===============================
-    values = []
-    objects = []
+    needs_object = final_output_as == "object"
+
+    values = None if needs_object else [None] * safe_count
+    objects = [None] * safe_count if needs_object else None
 
     for i in range(safe_count):
         raw = generator()
-
-        timestamp = None
-        if has_timestamp and extract_timestamp:
-            try:
-                timestamp = extract_timestamp(raw)
-            except Exception:
-                timestamp = None
-
         value = formatter(raw)
 
         if prefix:
@@ -162,18 +154,22 @@ def generate_uuid(
         if suffix:
             value = value + str(suffix)
 
-        values.append(value)
+        if needs_object:
+            obj = {
+                "uuid": value,
+                "raw": raw,
+                "index": i
+            }
 
-        obj = {
-            "uuid": value,
-            "raw": raw,
-            "index": i
-        }
+            if has_timestamp and extract_timestamp:
+                try:
+                    obj["timestamp"] = extract_timestamp(raw)
+                except Exception:
+                    pass
 
-        if timestamp:
-            obj["timestamp"] = timestamp
-
-        objects.append(obj)
+            objects[i] = obj
+        else:
+            values[i] = value
 
     # ===============================
     # SHAPE OUTPUT

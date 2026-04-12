@@ -1,6 +1,6 @@
 # uuid-kit
 
-Generate UUID values (v4, v7) with flexible formatting, prefixes, suffixes, and output shape options.
+Generate UUID values (`v4`, `v7`) with flexible formatting, prefixes, suffixes, and output shape options.
 
 ---
 
@@ -150,7 +150,7 @@ Example output:
       "raw": "123e4567-e89b-12d3-a456-426614174001",
       "index": 1,
       "timestamp": {
-        "iso": "2026-04-09T18:00:00Z",
+        "iso": "2026-04-09T18:00:00.001000Z",
         "unix": 1775757600001
       }
     }
@@ -193,7 +193,7 @@ Each object includes:
 - `uuid` = final formatted value
 - `raw` = original UUID before formatting
 - `index` = zero-based position in the result set
-- `timestamp` = only for v7, derived from the UUID
+- `timestamp` = only included for `v7` when `outputAs="object"`
 
 ### `outputAs="string"`
 
@@ -204,7 +204,7 @@ Returns `items` as a single comma-delimited string.
 ## Supported Versions
 
 - `v4` = random
-- `v7` = modern time-based
+- `v7` = time-based, sortable, recommended
 
 ---
 
@@ -217,6 +217,29 @@ from uuid_kit import ALLOWED_FORMATS, ALLOWED_VERSIONS, ALLOWED_OUTPUT_AS
 
 ---
 
+## Behavior
+
+- Invalid or missing `count` defaults to `1`
+- `count` is capped at `100`
+- `count` is converted to an integer
+- Invalid or missing `version` defaults to `v7`
+- Invalid or missing `format` defaults to `standard`
+- Invalid or missing `outputAs` defaults to `array`
+
+---
+
+## Performance Notes
+
+`uuid-kit` avoids unnecessary work during generation:
+
+- Object records are only built when `outputAs="object"`
+- Timestamps are only extracted for `v7` object output
+- List storage is preallocated for efficient generation
+
+This keeps array and string output paths lighter and faster.
+
+---
+
 ## Environment Notes
 
 Some hosted Python runtimes require you to explicitly add packages before use. In those environments, add:
@@ -225,16 +248,6 @@ Some hosted Python runtimes require you to explicitly add packages before use. I
 uuid-kit
 uuid6
 ```
-
----
-
-## Behavior
-
-- Invalid or missing `count` defaults to `1`
-- `count` is capped at `100`
-- Invalid or missing `version` defaults to `v7`
-- Invalid or missing `format` defaults to `standard`
-- Invalid or missing `outputAs` defaults to `array`
 
 ---
 
