@@ -33,14 +33,14 @@ ALLOWED_OUTPUT_AS = (
 )
 
 
-def get_formatter(format_value):
-    if format_value == "compact":
-        return lambda v: v.replace("-", "")
-    if format_value == "uppercase":
-        return lambda v: v.upper()
-    if format_value == "uppercase-compact":
-        return lambda v: v.replace("-", "").upper()
-    return lambda v: v
+def _generate_v4():
+    return str(uuid.uuid4())
+
+
+def _generate_v7():
+    if HAS_UUID7 and _uuid7_fn:
+        return str(_uuid7_fn())
+    return str(uuid.uuid4())
 
 
 def extract_timestamp_v7(uuid_value):
@@ -52,6 +52,20 @@ def extract_timestamp_v7(uuid_value):
         "iso": dt.isoformat().replace("+00:00", "Z"),
         "unix": ms
     }
+
+
+VERSION_CONFIG = {
+    "v4": {
+        "generator": _generate_v4,
+        "hasTimestamp": False,
+        "extractTimestamp": None
+    },
+    "v7": {
+        "generator": _generate_v7,
+        "hasTimestamp": True,
+        "extractTimestamp": extract_timestamp_v7
+    }
+}
 
 
 def generate_uuid(
@@ -107,35 +121,15 @@ def generate_uuid(
     normalized_output_as = str(outputAs or "array").lower()
     final_output_as = normalized_output_as if normalized_output_as in ALLOWED_OUTPUT_AS else "array"
 
-    formatter = get_formatter(final_format)
+    generator = VERSION_CONFIG[final_version]["generator"]
+    has_timestamp = VERSION_CONFIG[final_version]["hasTimestamp"]
+    extract_timestamp = VERSION_CONFIG[final_version]["extractTimestamp"]
 
-    # ===============================
-    # VERSION CONFIG
-    # ===============================
-    def generate_v4():
-        return str(uuid.uuid4())
-
-    def generate_v7():
-        if HAS_UUID7 and _uuid7_fn:
-            return str(_uuid7_fn())
-        return str(uuid.uuid4())
-
-    version_config = {
-        "v4": {
-            "generator": generate_v4,
-            "hasTimestamp": False,
-            "extractTimestamp": None
-        },
-        "v7": {
-            "generator": generate_v7,
-            "hasTimestamp": True,
-            "extractTimestamp": extract_timestamp_v7
-        }
-    }
-
-    generator = version_config[final_version]["generator"]
-    has_timestamp = version_config[final_version]["hasTimestamp"]
-    extract_timestamp = version_config[final_version]["extractTimestamp"]
+    # Precompute format and affix behavior for the hot loop.
+    use_compact = final_format in ("compact", "uppercase-compact")
+    use_upper = final_format in ("uppercase", "uppercase-compact")
+    prefix_str = str(prefix) if prefix else ""
+    suffix_str = str(suffix) if suffix else ""
 
     # ===============================
     # GENERATE (optimized)
@@ -147,12 +141,14 @@ def generate_uuid(
 
     for i in range(safe_count):
         raw = generator()
-        value = formatter(raw)
+        value = raw
 
-        if prefix:
-            value = str(prefix) + value
-        if suffix:
-            value = value + str(suffix)
+        if use_compact:
+            value = value.replace("-", "")
+        if use_upper:
+            value = value.upper()
+        if prefix_str or suffix_str:
+            value = prefix_str + value + suffix_str
 
         if needs_object:
             obj = {
@@ -177,7 +173,7 @@ def generate_uuid(
     if final_output_as == "object":
         items = objects
     elif final_output_as == "string":
-        items = ",".join(values)
+        items = "\n".join(values)
     else:
         items = values
 

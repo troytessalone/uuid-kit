@@ -172,7 +172,7 @@ Example output:
   "format": "standard",
   "output_as": "string",
   "count": 3,
-  "items": "uuid-1,uuid-2,uuid-3"
+  "items": "uuid-1\nuuid-2\nuuid-3"
 }
 ```
 
@@ -197,7 +197,7 @@ Each object includes:
 
 ### `outputAs="string"`
 
-Returns `items` as a single comma-delimited string.
+Returns `items` as a single newline-delimited string.
 
 ---
 

@@ -132,7 +132,7 @@ print(result)
   "format": "compact",
   "output_as": "string",
   "count": 2,
-  "items": "uuid1,uuid2"
+  "items": "uuid1\nuuid2"
 }
 ```
 

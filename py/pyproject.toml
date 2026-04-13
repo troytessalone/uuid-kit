@@ -40,3 +40,6 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/troytessalone/uuid-kit"
 Issues = "https://github.com/troytessalone/uuid-kit/issues"
+
+[tool.setuptools.package-data]
+uuid_kit = ["py.typed"]

@@ -168,7 +168,7 @@ export function generateUUID({
   if (finalOutputAs === "object") {
     items = objects;
   } else if (finalOutputAs === "string") {
-    items = values.join(",");
+    items = values.join("\n");
   } else {
     items = values;
   }
